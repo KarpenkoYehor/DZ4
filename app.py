@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, create_refresh_token
+from flask_jwt_extended import JWTManager, create_access_token, create_refresh_token, jwt_required
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
@@ -21,7 +21,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.String(100), nullable=False)  # Додаємо поле для пароля
 
     def __repr__(self):
         return f'<User {self.name}>'
@@ -35,21 +35,21 @@ with app.app_context():
 def hello_world():
     return 'Hello, World!'
 
-# Маршрут для реєстрації користувачів
+# Маршрут для реєстрації користувача
 @app.route('/register', methods=['POST'])
 def register():
     name = request.json.get('name', None)
     email = request.json.get('email', None)
     password = request.json.get('password', None)
 
-    if not name or not email or not password:
-        return jsonify({"msg": "Missing required fields"}), 400
-
+    # Перевірка, чи користувач уже існує
     if User.query.filter_by(email=email).first():
-        return jsonify({"msg": "Email already exists"}), 400
+        return jsonify({"msg": "User already exists"}), 400
 
+    # Хешуємо пароль
     hashed_password = generate_password_hash(password)
 
+    # Створюємо нового користувача
     new_user = User(name=name, email=email, password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
@@ -65,7 +65,7 @@ def login():
     # Знайти користувача в базі даних
     user = User.query.filter_by(email=email).first()
 
-    if user and check_password_hash(user.password, password):  # Перевірка хешованого пароля
+    if user and check_password_hash(user.password, password):  # Перевірка пароля
         # Генерація токена
         access_token = create_access_token(identity=user.id)
         refresh_token = create_refresh_token(identity=user.id)
@@ -73,13 +73,14 @@ def login():
     else:
         return jsonify({"msg": "Invalid credentials"}), 401
 
-# Маршрут для виходу (Logout)
+# Маршрут для виходу (Logout) - просто повідомляємо, що вихід успішний
 @app.route('/logout', methods=['POST'])
 @jwt_required()
 def logout():
     return jsonify({"msg": "Logout successful"}), 200
 
-# Захищений маршрут
+
+# Захищений маршрут (при використанні JWT токена)
 @app.route('/protected', methods=['GET'])
 @jwt_required()
 def protected():
@@ -88,25 +89,3 @@ def protected():
 # Запуск сервера
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
-
-from werkzeug.security import generate_password_hash
-
-@app.route('/register', methods=['POST'])
-def register():
-    name = request.json.get('name', None)
-    email = request.json.get('email', None)
-    password = request.json.get('password', None)
-
-    # Перевірка, чи вже є користувач з таким email
-    if User.query.filter_by(email=email).first():
-        return jsonify({"msg": "User already exists"}), 400
-
-    # Хешуємо пароль перед збереженням
-    hashed_password = generate_password_hash(password, method='sha256')
-
-    # Створення нового користувача
-    new_user = User(name=name, email=email, password=hashed_password)
-    db.session.add(new_user)
-    db.session.commit()
-
-    return jsonify({"msg": "User registered successfully"}), 201
