@@ -86,6 +86,12 @@ def logout():
 def protected():
     return jsonify(message="This is a protected route.")
 
+# Новий маршрут для GET-запиту на /api/v1/productentitiestool-ui-admin/partner/getAll
+@app.route('/api/v1/productentitiestool-ui-admin/partner/getAll', methods=['POST'])
+def get_all_partners():
+    # Ваш код для обробки запиту
+    return jsonify({"message": "Success"}), 200
+
 # Запуск сервера
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
