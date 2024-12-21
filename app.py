@@ -20,7 +20,7 @@ app = Flask(__name__)
 # )
 
 app.config['SQLALCHEMY_DATABASE_URI'] = (
-    "postgresql+psycopg2://postgres:test@34.107.44.111:5432/postgres?"
+    "postgresql+psycopg2://postgres:test@34.107.44.111:5432/database-pr5-2?"
    # "sslmode=verify-full&"
     # "sslcert=client-cert.pem&"
     # "sslkey=client-key.pem&"
