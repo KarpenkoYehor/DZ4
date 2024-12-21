@@ -43,7 +43,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(1000), nullable=False)
     email = db.Column(db.String(1200), unique=True, nullable=False)
-    password = db.Column(db.String(1000), nullable=False)  # Додаємо поле для пароля
+    password = db.Column(db.Text, nullable=False)  # Додаємо поле для пароля
 
     def __repr__(self):
         return f'<User {self.name}>'
