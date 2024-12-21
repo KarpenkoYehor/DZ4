@@ -11,15 +11,24 @@ app = Flask(__name__)
 #postgresql+psycopg2://postgres:test@34.71.145.67:443/steady-circuit-445020-i9:us-central1:karpenkoyehor
 #app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-app.config['SQLALCHEMY_DATABASE_URI'] = (
-    "postgresql+psycopg2://postgres:test@34.107.44.111:5432/steady-circuit-445020-i9:europe-west3:pr5-2?"
-    "sslmode=verify-full&"
-    "sslcert=/etc/secrets/client-cert.pem&"
-    "sslkey=/etc/secrets/client-key.pem&"
-    "sslrootcert=/etc/secrets/server-ca.pem"
-)
+# app.config['SQLALCHEMY_DATABASE_URI'] = (
+#     "postgresql+psycopg2://postgres:test@34.107.44.111:5432/steady-circuit-445020-i9:europe-west3:pr5-2?"
+#     "sslmode=verify-full&"
+#     "sslcert=/etc/secrets/client-cert.pem&"
+#     "sslkey=/etc/secrets/client-key.pem&"
+#     "sslrootcert=/etc/secrets/server-ca.pem"
+# )
 
+app.config['SQLALCHEMY_DATABASE_URI'] = (
+    "postgresql+psycopg2://postgres:test@34.107.44.111:5432/postgres?"
+   # "sslmode=verify-full&"
+    # "sslcert=client-cert.pem&"
+    # "sslkey=client-key.pem&"
+    # "sslrootcert=server-ca.pem"
+)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+
 
 
 # Налаштування для JWT
