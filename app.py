@@ -32,8 +32,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
 # Налаштування для JWT
-#app.config['JWT_SECRET_KEY'] = 'your_jwt_secret_key'  # Замініть на ваш секретний ключ
-#jwt = JWTManager(app)
+app.config['JWT_SECRET_KEY'] = 'your_jwt_secret_key'  # Замініть на ваш секретний ключ
+jwt = JWTManager(app)
 
 # Ініціалізація SQLAlchemy
 db = SQLAlchemy(app)
@@ -98,20 +98,20 @@ def login():
 
 # Маршрут для виходу (Logout) - просто повідомляємо, що вихід успішний
 @app.route('/logout', methods=['POST'])
-#@jwt_required()
+@jwt_required()
 def logout():
     return jsonify({"msg": "Logout successful"}), 200
 
 
 # Захищений маршрут (при використанні JWT токена)
 @app.route('/protected', methods=['GET'])
-#@jwt_required()
+@jwt_required()
 def protected():
     return jsonify(message="This is a protected route.")
 
 # Новий маршрут для GET-запиту на /api/v1/productentitiestool-ui-admin/partner/getAll
 @app.route('/api/v1/productentitiestool-ui-admin/partner/getAll', methods=['GET'])
-#@jwt_required()  # Захистити цей маршрут, якщо необхідно
+@jwt_required()  # Захистити цей маршрут, якщо необхідно
 def get_all_partners():
     # Ваш код для обробки запиту
     # Наприклад, повертаємо тестові дані
