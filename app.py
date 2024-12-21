@@ -6,10 +6,21 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 
 # Налаштування бази даних
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:test@34.71.145.67:5432/steady-circuit-445020-i9:us-central1:karpenkoyehor'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:test@34.71.145.67:5432/steady-circuit-445020-i9:us-central1:karpenkoyehor'
 # steady-circuit-445020-i9:us-central1:karpenkoyehor
 #postgresql+psycopg2://postgres:test@34.71.145.67:443/steady-circuit-445020-i9:us-central1:karpenkoyehor
+#app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+app.config['SQLALCHEMY_DATABASE_URI'] = (
+    "postgresql+psycopg2://postgres:test@34.71.145.67:5432/steady-circuit-445020-i9:us-central1:karpenkoyehor?"
+    "sslmode=verify-full&"
+    "sslcert=/etc/secrets/client-cert.pem&"
+    "sslkey=/etc/secrets/client-key.pem&"
+    "sslrootcert=/etc/secrets/server-ca.pem"
+)
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 
 # Налаштування для JWT
 #app.config['JWT_SECRET_KEY'] = 'your_jwt_secret_key'  # Замініть на ваш секретний ключ
