@@ -6,12 +6,14 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 
 # Налаштування бази даних
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydatabase.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:test@34.71.145.67:5432/steady-circuit-445020-i9:us-central1:karpenkoyehor'
+# steady-circuit-445020-i9:us-central1:karpenkoyehor
+#postgresql+psycopg2://postgres:test@34.71.145.67:5432/steady-circuit-445020-i9:us-central1:karpenkoyehor
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Налаштування для JWT
-app.config['JWT_SECRET_KEY'] = 'your_jwt_secret_key'  # Замініть на ваш секретний ключ
-jwt = JWTManager(app)
+#app.config['JWT_SECRET_KEY'] = 'your_jwt_secret_key'  # Замініть на ваш секретний ключ
+#jwt = JWTManager(app)
 
 # Ініціалізація SQLAlchemy
 db = SQLAlchemy(app)
@@ -72,26 +74,30 @@ def login():
         return jsonify(access_token=access_token, refresh_token=refresh_token), 200
     else:
         return jsonify({"msg": "Invalid credentials"}), 401
+    
 
 # Маршрут для виходу (Logout) - просто повідомляємо, що вихід успішний
 @app.route('/logout', methods=['POST'])
-@jwt_required()
+#@jwt_required()
 def logout():
     return jsonify({"msg": "Logout successful"}), 200
 
 
 # Захищений маршрут (при використанні JWT токена)
 @app.route('/protected', methods=['GET'])
-@jwt_required()
+#@jwt_required()
 def protected():
     return jsonify(message="This is a protected route.")
 
 # Новий маршрут для GET-запиту на /api/v1/productentitiestool-ui-admin/partner/getAll
-@app.route('/api/v1/productentitiestool-ui-admin/partner/getAll', methods=['POST'])
+@app.route('/api/v1/productentitiestool-ui-admin/partner/getAll', methods=['GET'])
+#@jwt_required()  # Захистити цей маршрут, якщо необхідно
 def get_all_partners():
     # Ваш код для обробки запиту
-    return jsonify({"message": "Success"}), 200
+    # Наприклад, повертаємо тестові дані
+    partners = [{"name": "Partner 1"}, {"name": "Partner 2"}]  # Приклад даних
+    return jsonify(partners), 200
 
 # Запуск сервера
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=True, port=5002)
